@@ -5,4 +5,5 @@ export interface MTVLebanonNews {
 
 export interface Article {
   name: string;
+  description: string;
 }

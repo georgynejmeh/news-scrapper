@@ -5,10 +5,9 @@ interface Props {
   news: string;
   extraNews?: string;
   breaking?: boolean;
-  more?: boolean;
 }
 
-const TableRow = ({ name, news, breaking, more, extraNews }: Props) => {
+const TableRow = ({ name, news, breaking, extraNews }: Props) => {
   const [shownExtraNews, setShownExtraNews] = useState(false);
   return (
     <tr>
@@ -25,7 +24,7 @@ const TableRow = ({ name, news, breaking, more, extraNews }: Props) => {
       <td className={`ps-6 ${extraNews && "flex flex-col"}`}>
         <div className="flex">
           {news}
-          {more ? (
+          {extraNews ? (
             <span
               onClick={() => setShownExtraNews(!shownExtraNews)}
               className="text-blue-600 underline cursor-pointer ps-2"

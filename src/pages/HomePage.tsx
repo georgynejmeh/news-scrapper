@@ -3,16 +3,22 @@ import {
   alarabiyaBreakingNewsEndpoint,
   aljazeeraBreakingNewsEndpoint,
   aljazeeraNewsEndpoint,
+  alqahiraNewsEndpoint,
+  CNNNewsEndpoint,
   MTVLebanonNewsEndpoint,
+  skyNewsBreakingNewsEndpoint,
 } from "../endpoints/endpoints";
 import useGetData from "../hooks/useGetData";
 import { AlarabiyaBreakingNews } from "../models/AlarabiyaBreakingNews";
 import { AljazeeraBreakingNews } from "../models/AljazeeraBreakingNews";
 import { AljazeeraNews } from "../models/AljazeeraNews";
+import { AlqahiraNews } from "../models/AlqahiraNews";
+import { CNNNews } from "../models/CNNNews";
 import { MTVLebanonNews } from "../models/MTVLebanonNews";
+import { SkyNewsBreakingNews } from "../models/SkyNewsBreakingNews";
 
 const HomePage = () => {
-  // SYRIA TV - ALARABIYA
+  // SYRIA TV - ALARABIYA - BBC
   const FILTERS =
     /سوري|حلب|حماة|حماه|لاذقية|لاذقيه|طرطوس|دمشق|حسكة|حسكه|قامشلي/;
 
@@ -35,14 +41,38 @@ const HomePage = () => {
   } = useGetData<AlarabiyaBreakingNews>(alarabiyaBreakingNewsEndpoint);
 
   const {
+    isLoading: isLoadingSkyNewsBreakingNews,
+    error: errorSkyNewsBreakingNews,
+    data: dataSkyNewsBreakingNews,
+  } = useGetData<SkyNewsBreakingNews>(skyNewsBreakingNewsEndpoint);
+
+  const {
     isLoading: isLoadingMTVLebanonNews,
     error: errorMTVLebanonNews,
     data: dataMTVLebanonNews,
   } = useGetData<MTVLebanonNews>(MTVLebanonNewsEndpoint);
 
+  const {
+    isLoading: isLoadingAlqahiraNews,
+    error: errorAlqahiraNews,
+    data: dataAlqahiraNews,
+  } = useGetData<AlqahiraNews>(alqahiraNewsEndpoint);
+
+  const {
+    isLoading: isLoadingCNNNews,
+    error: errorCNNNews,
+    data: dataCNNNews,
+  } = useGetData<CNNNews>(CNNNewsEndpoint);
+
   const filteredMTVLebanonNews = dataMTVLebanonNews
     ? dataMTVLebanonNews.articles.filter(
         (article) => FILTERS.test(article.name) // Using a regular expression to match any of the keywords
+      )
+    : [];
+
+  const filteredCNNNews = dataCNNNews
+    ? dataCNNNews.data.list.items.filter(
+        (article) => FILTERS.test(article.title) // Using a regular expression to match any of the keywords
       )
     : [];
 
@@ -91,6 +121,19 @@ const HomePage = () => {
                 : ""
             }
           />
+
+          {isLoadingSkyNewsBreakingNews ? (
+            <TableRow breaking name="Sky News" news="" />
+          ) : errorSkyNewsBreakingNews ? (
+            <TableRow breaking name="Sky News" news="" />
+          ) : dataSkyNewsBreakingNews ? (
+            dataSkyNewsBreakingNews.map((item, index) => (
+              <TableRow breaking key={index} name="Sky News" news={item.text} />
+            ))
+          ) : (
+            <TableRow breaking name="Sky News" news="" />
+          )}
+
           {isLoadingAljazeeraNews ? (
             <TableRow name="الجزيرة" news="" />
           ) : errorAljazeeraNews ? (
@@ -99,7 +142,6 @@ const HomePage = () => {
             filteredAljazeeraNews.map((item, index) => (
               <TableRow
                 key={index}
-                more
                 name="الجزيرة"
                 news={item.title}
                 extraNews={item.excerpt}
@@ -115,10 +157,39 @@ const HomePage = () => {
             <TableRow name="MTV Lebanon" news="" />
           ) : dataMTVLebanonNews ? (
             filteredMTVLebanonNews.map((item, index) => (
-              <TableRow key={index} name="MTV Lebanon" news={item.name} />
+              <TableRow
+                key={index}
+                name="MTV Lebanon"
+                news={item.name}
+                extraNews={item.description}
+              />
             ))
           ) : (
             <TableRow name="MTV Lebanon" news="" />
+          )}
+
+          {isLoadingCNNNews ? (
+            <TableRow name="CNN Arabia" news="" />
+          ) : errorCNNNews ? (
+            <TableRow name="CNN Arabia" news="" />
+          ) : dataCNNNews ? (
+            filteredCNNNews.map((item, index) => (
+              <TableRow key={index} name="CNN Arabia" news={item.title} />
+            ))
+          ) : (
+            <TableRow name="CNN Arabia" news="" />
+          )}
+
+          {isLoadingAlqahiraNews ? (
+            <TableRow name="القاهرة" news="" />
+          ) : errorAlqahiraNews ? (
+            <TableRow name="القاهرة" news="" />
+          ) : dataAlqahiraNews ? (
+            dataAlqahiraNews.data.posts.map((item, index) => (
+              <TableRow key={index} name="القاهرة" news={item.title} />
+            ))
+          ) : (
+            <TableRow name="القاهرة" news="" />
           )}
         </tbody>
       </table>
