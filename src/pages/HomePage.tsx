@@ -127,16 +127,6 @@ const HomePage = () => {
               <TableRow breaking key={index} name="Sky News" news={item.text} />
             ))}
 
-          {dataAljazeeraNews &&
-            filteredAljazeeraNews.map((item, index) => (
-              <TableRow
-                key={index}
-                name="الجزيرة"
-                news={item.title}
-                extraNews={item.excerpt}
-                date={shownDates ? item.date.replace("T", " ") : ""}
-              />
-            ))}
           {dataMTVLebanonNews &&
             filteredMTVLebanonNews.map((item, index) => (
               <TableRow
@@ -155,6 +145,17 @@ const HomePage = () => {
                 name="CNN Arabia"
                 news={item.title}
                 date={shownDates ? item.published.substring(0, 25) : ""}
+              />
+            ))}
+
+          {dataAljazeeraNews &&
+            filteredAljazeeraNews.map((item, index) => (
+              <TableRow
+                key={index}
+                name="الجزيرة"
+                news={item.title}
+                extraNews={item.excerpt}
+                date={shownDates ? item.date.replace("T", " ") : ""}
               />
             ))}
 
