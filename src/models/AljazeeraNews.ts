@@ -15,6 +15,7 @@ export interface Homepage {
 export interface FeedPost {
   title: string;
   excerpt: string;
+  date: string;
 }
 
 export interface CuratedCollection {
@@ -24,6 +25,7 @@ export interface CuratedCollection {
 export interface Post {
   title: string;
   excerpt: string;
+  date: string;
 }
 
 export interface AutomatedCollection {
@@ -33,4 +35,5 @@ export interface AutomatedCollection {
 export interface Post2 {
   title: string;
   excerpt: string;
+  date: string;
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import TableRow from "../components/TableRow";
 import {
   alarabiyaBreakingNewsEndpoint,
@@ -18,6 +19,8 @@ import { MTVLebanonNews } from "../models/MTVLebanonNews";
 import { SkyNewsBreakingNews } from "../models/SkyNewsBreakingNews";
 
 const HomePage = () => {
+  const [shownDates, setShownDates] = useState(true);
+
   // SYRIA TV - ALARABIYA - BBC
   const FILTERS =
     /سوري|حلب|حماة|حماه|لاذقية|لاذقيه|طرطوس|دمشق|حسكة|حسكه|قامشلي/;
@@ -65,14 +68,14 @@ const HomePage = () => {
   } = useGetData<CNNNews>(CNNNewsEndpoint);
 
   const filteredMTVLebanonNews = dataMTVLebanonNews
-    ? dataMTVLebanonNews.articles.filter(
-        (article) => FILTERS.test(article.name) // Using a regular expression to match any of the keywords
+    ? dataMTVLebanonNews.articles.filter((article) =>
+        FILTERS.test(article.name)
       )
     : [];
 
   const filteredCNNNews = dataCNNNews
-    ? dataCNNNews.data.list.items.filter(
-        (article) => FILTERS.test(article.title) // Using a regular expression to match any of the keywords
+    ? dataCNNNews.data.list.items.filter((article) =>
+        FILTERS.test(article.title)
       )
     : [];
 
@@ -86,13 +89,19 @@ const HomePage = () => {
           (collection) => collection.posts || []
         ) || []),
       ]
-        .filter((post) => FILTERS.test(post.excerpt)) // Filter based on the keywords
-        .map((post) => post) // Get the excerpts
+        .filter((post) => FILTERS.test(post.excerpt))
+        .map((post) => post)
     : [];
 
   return (
     <main dir="rtl">
-      <table className="table">
+      <button
+        className="fixed z-10 bottom-8 right-8 bg-blue-600 text-white py-1 px-2 rounded-xl"
+        onClick={() => setShownDates(!shownDates)}
+      >
+        {shownDates ? "إخفاء التواريخ" : "إظهار التواريخ"}
+      </button>
+      <table className="table mb-32">
         <tbody>
           <TableRow
             breaking
@@ -145,6 +154,7 @@ const HomePage = () => {
                 name="الجزيرة"
                 news={item.title}
                 extraNews={item.excerpt}
+                date={shownDates ? item.date.replace("T", " ") : ""}
               />
             ))
           ) : (
@@ -162,6 +172,7 @@ const HomePage = () => {
                 name="MTV Lebanon"
                 news={item.name}
                 extraNews={item.description}
+                date={shownDates ? item.date : ""}
               />
             ))
           ) : (
@@ -174,7 +185,12 @@ const HomePage = () => {
             <TableRow name="CNN Arabia" news="" />
           ) : dataCNNNews ? (
             filteredCNNNews.map((item, index) => (
-              <TableRow key={index} name="CNN Arabia" news={item.title} />
+              <TableRow
+                key={index}
+                name="CNN Arabia"
+                news={item.title}
+                date={shownDates ? item.published.substring(0, 25) : ""}
+              />
             ))
           ) : (
             <TableRow name="CNN Arabia" news="" />
@@ -186,7 +202,12 @@ const HomePage = () => {
             <TableRow name="القاهرة" news="" />
           ) : dataAlqahiraNews ? (
             dataAlqahiraNews.data.posts.map((item, index) => (
-              <TableRow key={index} name="القاهرة" news={item.title} />
+              <TableRow
+                key={index}
+                name="القاهرة"
+                news={item.title}
+                extraNews={item.raw_content}
+              />
             ))
           ) : (
             <TableRow name="القاهرة" news="" />

@@ -12,4 +12,5 @@ export interface List {
 
 export interface Item {
   title: string;
+  published: string;
 }
