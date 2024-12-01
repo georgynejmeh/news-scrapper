@@ -26,44 +26,44 @@ const HomePage = () => {
     /سوري|حلب|حماة|حماه|لاذقية|لاذقيه|طرطوس|دمشق|حسكة|حسكه|قامشلي/;
 
   const {
-    isLoading: isLoadingAljazeeraBreakingNews,
-    error: errorAljazeeraBreakingNews,
+    // isLoading: isLoadingAljazeeraBreakingNews,
+    // error: errorAljazeeraBreakingNews,
     data: dataAljazeeraBreakingNews,
   } = useGetData<AljazeeraBreakingNews>(aljazeeraBreakingNewsEndpoint);
 
   const {
-    isLoading: isLoadingAljazeeraNews,
-    error: errorAljazeeraNews,
+    // isLoading: isLoadingAljazeeraNews,
+    // error: errorAljazeeraNews,
     data: dataAljazeeraNews,
   } = useGetData<AljazeeraNews>(aljazeeraNewsEndpoint);
 
   const {
-    isLoading: isLoadingAlarabiyaBreakingNews,
-    error: errorAlarabiyaBreakingNews,
+    // isLoading: isLoadingAlarabiyaBreakingNews,
+    // error: errorAlarabiyaBreakingNews,
     data: dataAlarabiyaBreakingNews,
   } = useGetData<AlarabiyaBreakingNews>(alarabiyaBreakingNewsEndpoint);
 
   const {
-    isLoading: isLoadingSkyNewsBreakingNews,
-    error: errorSkyNewsBreakingNews,
+    // isLoading: isLoadingSkyNewsBreakingNews,
+    // error: errorSkyNewsBreakingNews,
     data: dataSkyNewsBreakingNews,
   } = useGetData<SkyNewsBreakingNews>(skyNewsBreakingNewsEndpoint);
 
   const {
-    isLoading: isLoadingMTVLebanonNews,
-    error: errorMTVLebanonNews,
+    // isLoading: isLoadingMTVLebanonNews,
+    // error: errorMTVLebanonNews,
     data: dataMTVLebanonNews,
   } = useGetData<MTVLebanonNews>(MTVLebanonNewsEndpoint);
 
   const {
-    isLoading: isLoadingAlqahiraNews,
-    error: errorAlqahiraNews,
+    // isLoading: isLoadingAlqahiraNews,
+    // error: errorAlqahiraNews,
     data: dataAlqahiraNews,
   } = useGetData<AlqahiraNews>(alqahiraNewsEndpoint);
 
   const {
-    isLoading: isLoadingCNNNews,
-    error: errorCNNNews,
+    // isLoading: isLoadingCNNNews,
+    // error: errorCNNNews,
     data: dataCNNNews,
   } = useGetData<CNNNews>(CNNNewsEndpoint);
 
@@ -103,51 +103,30 @@ const HomePage = () => {
       </button>
       <table className="table mb-32">
         <tbody>
-          <TableRow
-            breaking
-            name="العربية"
-            news={
-              isLoadingAlarabiyaBreakingNews
-                ? ""
-                : errorAlarabiyaBreakingNews
-                ? ""
-                : dataAlarabiyaBreakingNews
-                ? dataAlarabiyaBreakingNews.message
-                : ""
-            }
-          />
-
-          <TableRow
-            breaking
-            name="الجزيرة"
-            news={
-              isLoadingAljazeeraBreakingNews
-                ? ""
-                : errorAljazeeraBreakingNews
-                ? ""
-                : dataAljazeeraBreakingNews
-                ? dataAljazeeraBreakingNews.data.breakingNews.tickerText || ""
-                : ""
-            }
-          />
-
-          {isLoadingSkyNewsBreakingNews ? (
-            <TableRow breaking name="Sky News" news="" />
-          ) : errorSkyNewsBreakingNews ? (
-            <TableRow breaking name="Sky News" news="" />
-          ) : dataSkyNewsBreakingNews ? (
-            dataSkyNewsBreakingNews.map((item, index) => (
-              <TableRow breaking key={index} name="Sky News" news={item.text} />
-            ))
-          ) : (
-            <TableRow breaking name="Sky News" news="" />
+          {dataAlarabiyaBreakingNews && (
+            <TableRow
+              breaking
+              name="العربية"
+              news={dataAlarabiyaBreakingNews.message}
+            />
           )}
 
-          {isLoadingAljazeeraNews ? (
-            <TableRow name="الجزيرة" news="" />
-          ) : errorAljazeeraNews ? (
-            <TableRow name="الجزيرة" news="" />
-          ) : dataAljazeeraNews ? (
+          {dataAljazeeraBreakingNews && (
+            <TableRow
+              breaking
+              name="الجزيرة"
+              news={
+                dataAljazeeraBreakingNews.data.breakingNews.tickerText || ""
+              }
+            />
+          )}
+
+          {dataSkyNewsBreakingNews &&
+            dataSkyNewsBreakingNews.map((item, index) => (
+              <TableRow breaking key={index} name="Sky News" news={item.text} />
+            ))}
+
+          {dataAljazeeraNews &&
             filteredAljazeeraNews.map((item, index) => (
               <TableRow
                 key={index}
@@ -156,16 +135,8 @@ const HomePage = () => {
                 extraNews={item.excerpt}
                 date={shownDates ? item.date.replace("T", " ") : ""}
               />
-            ))
-          ) : (
-            <TableRow name="الجزيرة" news="" />
-          )}
-
-          {isLoadingMTVLebanonNews ? (
-            <TableRow name="MTV Lebanon" news="" />
-          ) : errorMTVLebanonNews ? (
-            <TableRow name="MTV Lebanon" news="" />
-          ) : dataMTVLebanonNews ? (
+            ))}
+          {dataMTVLebanonNews &&
             filteredMTVLebanonNews.map((item, index) => (
               <TableRow
                 key={index}
@@ -174,16 +145,9 @@ const HomePage = () => {
                 extraNews={item.description}
                 date={shownDates ? item.date : ""}
               />
-            ))
-          ) : (
-            <TableRow name="MTV Lebanon" news="" />
-          )}
+            ))}
 
-          {isLoadingCNNNews ? (
-            <TableRow name="CNN Arabia" news="" />
-          ) : errorCNNNews ? (
-            <TableRow name="CNN Arabia" news="" />
-          ) : dataCNNNews ? (
+          {dataCNNNews &&
             filteredCNNNews.map((item, index) => (
               <TableRow
                 key={index}
@@ -191,16 +155,9 @@ const HomePage = () => {
                 news={item.title}
                 date={shownDates ? item.published.substring(0, 25) : ""}
               />
-            ))
-          ) : (
-            <TableRow name="CNN Arabia" news="" />
-          )}
+            ))}
 
-          {isLoadingAlqahiraNews ? (
-            <TableRow name="القاهرة" news="" />
-          ) : errorAlqahiraNews ? (
-            <TableRow name="القاهرة" news="" />
-          ) : dataAlqahiraNews ? (
+          {dataAlqahiraNews &&
             dataAlqahiraNews.data.posts.map((item, index) => (
               <TableRow
                 key={index}
@@ -208,10 +165,7 @@ const HomePage = () => {
                 news={item.title}
                 extraNews={item.raw_content}
               />
-            ))
-          ) : (
-            <TableRow name="القاهرة" news="" />
-          )}
+            ))}
         </tbody>
       </table>
     </main>
