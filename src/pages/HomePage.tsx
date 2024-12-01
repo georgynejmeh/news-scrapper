@@ -111,15 +111,16 @@ const HomePage = () => {
             />
           )}
 
-          {dataAljazeeraBreakingNews && (
-            <TableRow
-              breaking
-              name="الجزيرة"
-              news={
-                dataAljazeeraBreakingNews.data.breakingNews.tickerText || ""
-              }
-            />
-          )}
+          {dataAljazeeraBreakingNews &&
+            dataAljazeeraBreakingNews.data.breakingNews.tickerText !== null && (
+              <TableRow
+                breaking
+                name="الجزيرة"
+                news={
+                  dataAljazeeraBreakingNews.data.breakingNews.tickerText || ""
+                }
+              />
+            )}
 
           {dataSkyNewsBreakingNews &&
             dataSkyNewsBreakingNews.map((item, index) => (
